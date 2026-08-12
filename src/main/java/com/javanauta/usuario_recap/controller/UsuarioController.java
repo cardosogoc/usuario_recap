@@ -4,10 +4,7 @@ import com.javanauta.usuario_recap.business.UsuarioService;
 import com.javanauta.usuario_recap.business.dto.UsuarioDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/usuario")
@@ -19,6 +16,26 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<UsuarioDTO> salvaUsuario(@RequestBody UsuarioDTO dto){
         return ResponseEntity.ok(service.salvaUsuario(dto));
+    }
+
+    //Pesquisando o usuario por meio do body
+    @GetMapping("/pesquisa")
+    public ResponseEntity<UsuarioDTO> buscarUsuarioPorEmail(@RequestBody EmailRequest request) {
+        return ResponseEntity.ok(service.buscarUsuarioPorEmail(request.email()));
+    }
+
+    public record EmailRequest(String email) {}
+
+    //Pesquisando Usuario por meio de parâmetro
+    @GetMapping
+    public ResponseEntity<UsuarioDTO> buscaUsuarioPorEmail(@RequestParam("email") String email){
+        return ResponseEntity.ok(service.buscarUsuarioPorEmail(email));
+    }
+
+    @DeleteMapping("/{email}")
+    public ResponseEntity<Void> deletaUsuarioPorEmail(@PathVariable String email){
+        service.deletaUsuarioPorEmail(email);
+        return ResponseEntity.ok().build();
     }
 
 }
