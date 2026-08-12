@@ -13,6 +13,11 @@ public class UsuarioController {
 
     private final UsuarioService service;
 
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UsuarioDTO dto){
+        return ResponseEntity.ok(service.autenticarUsuario(dto));
+    }
+
     @PostMapping
     public ResponseEntity<UsuarioDTO> salvaUsuario(@RequestBody UsuarioDTO dto){
         return ResponseEntity.ok(service.salvaUsuario(dto));

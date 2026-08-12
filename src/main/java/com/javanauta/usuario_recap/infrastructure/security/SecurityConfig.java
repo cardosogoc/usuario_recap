@@ -47,12 +47,12 @@ public class SecurityConfig {
                         // Permite criação de usuário
                         .requestMatchers(HttpMethod.POST, "/usuario")
                         .permitAll()
-                        .requestMatchers(HttpMethod.GET, "/usuario")
-                        .permitAll()
-                        .requestMatchers(HttpMethod.GET, "/usuario/pesquisa")
-                        .permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/usuario/{email}")
-                        .permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/usuario")
+//                        .permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/usuario/pesquisa")
+//                        .permitAll()
+//                        .requestMatchers(HttpMethod.DELETE, "/usuario/{email}")
+//                        .permitAll()
                         // Exige autenticação para rotas de usuário
                         .requestMatchers("/usuario/**")
                         .authenticated()
