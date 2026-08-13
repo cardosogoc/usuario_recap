@@ -1,6 +1,8 @@
 package com.javanauta.usuario_recap.controller;
 
 import com.javanauta.usuario_recap.business.UsuarioService;
+import com.javanauta.usuario_recap.business.dto.EnderecoDTO;
+import com.javanauta.usuario_recap.business.dto.TelefoneDTO;
 import com.javanauta.usuario_recap.business.dto.UsuarioDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +50,20 @@ public class UsuarioController {
             @RequestBody UsuarioDTO dto,
             @RequestHeader("Authorization") String token){
         return ResponseEntity.ok(service.atualizaDadosUsuario(token, dto));
+    }
+
+    @PutMapping("/endereco")
+    public ResponseEntity<EnderecoDTO> atualizaEndereco(
+            @RequestBody EnderecoDTO dto,
+            @RequestParam("id") Long id){
+        return ResponseEntity.ok(service.atualizaEndereco(id, dto));
+    }
+
+    @PutMapping("/telefone")
+    public ResponseEntity<TelefoneDTO> atualizaTelefone(
+            @RequestBody TelefoneDTO dto,
+            @RequestParam("id") Long id){
+        return ResponseEntity.ok(service.atualizaTelefone(id, dto));
     }
 
 }
