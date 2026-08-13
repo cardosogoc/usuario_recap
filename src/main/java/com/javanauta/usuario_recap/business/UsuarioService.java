@@ -80,4 +80,17 @@ public class UsuarioService {
         repository.deleteByEmail(email);
     }
 
+    public UsuarioDTO atualizaDadosUsuario(String token, UsuarioDTO dto){
+        String email = jwtUtil.extrairEmailToken(token.substring(7));
+
+        dto.setSenha(dto.getSenha() != null ? passwordEncoder.encode(dto.getSenha()) : null);
+
+        Usuario entity = repository.findByEmail(email).orElseThrow(() ->
+                new ResourceNotFoundException("Email não localizado"));
+
+        Usuario usuario = converter.atualizaUsuario(dto, entity);
+
+        return converter.paraUsuarioDTO(repository.save(usuario));
+    }
+
 }
