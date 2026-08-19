@@ -47,11 +47,15 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(authorize -> authorize
+                                //Permite o Swagger
                                 .requestMatchers(
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",
                                         "/swagger-ui.html"
                                 ).permitAll()
+                                // Permite API VIACEP
+                                .requestMatchers(HttpMethod.GET,"/usuario/endereco/**")
+                                .permitAll()
                                 // Permite acesso ao login
                                 .requestMatchers(HttpMethod.POST, "/usuario/login")
                                 .permitAll()
