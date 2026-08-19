@@ -1,5 +1,7 @@
 package com.javanauta.usuario_recap.infrastructure.security;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,10 +19,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@SecurityScheme(name = SecurityConfig.SECURITY_SCHEME, type = SecuritySchemeType.HTTP,
+        bearerFormat = "JWT", scheme = "bearer")
 public class SecurityConfig {
     // Adicionados atributos da classe para guardar dependências
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
+
+    public static final String SECURITY_SCHEME = "bearerAuth";
 
     // Spring moderno já injeta automaticamente quando existe um único construtor
     public SecurityConfig(JwtUtil jwtUtil, UserDetailsService userDetailsService) {
@@ -38,27 +44,32 @@ public class SecurityConfig {
                 // (normal em autenticação JWT stateless)
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session ->
-                                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(authorize -> authorize
-                        // Permite acesso ao login
-                        .requestMatchers(HttpMethod.POST, "/usuario/login")
-                        .permitAll()
-                        // Permite criação de usuário
-                        .requestMatchers(HttpMethod.POST, "/usuario")
-                        .permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/usuario")
-//                        .permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/usuario/pesquisa")
-//                        .permitAll()
-//                        .requestMatchers(HttpMethod.DELETE, "/usuario/{email}")
-//                        .permitAll()
-                        // Exige autenticação para rotas de usuário
-                        .requestMatchers("/usuario/**")
-                        .authenticated()
-                        // Exige autenticação para todas as outras
-                        .anyRequest()
-                        .authenticated()
+                                .requestMatchers(
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html"
+                                ).permitAll()
+                                // Permite acesso ao login
+                                .requestMatchers(HttpMethod.POST, "/usuario/login")
+                                .permitAll()
+                                // Permite criação de usuário
+                                .requestMatchers(HttpMethod.POST, "/usuario")
+                                .permitAll()
+//                              .requestMatchers(HttpMethod.GET, "/usuario")
+//                              .permitAll()
+//                              .requestMatchers(HttpMethod.GET, "/usuario/pesquisa")
+//                              .permitAll()
+//                              .requestMatchers(HttpMethod.DELETE, "/usuario/{email}")
+//                              .permitAll()
+                                // Exige autenticação para rotas de usuário
+                                .requestMatchers("/usuario/**")
+                                .authenticated()
+                                // Exige autenticação para todas as outras
+                                .anyRequest()
+                                .authenticated()
                 )
                 // Adiciona filtro JWT antes do filtro padrão
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
