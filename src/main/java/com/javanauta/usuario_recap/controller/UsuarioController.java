@@ -4,6 +4,8 @@ import com.javanauta.usuario_recap.business.UsuarioService;
 import com.javanauta.usuario_recap.business.dto.EnderecoDTO;
 import com.javanauta.usuario_recap.business.dto.TelefoneDTO;
 import com.javanauta.usuario_recap.business.dto.UsuarioDTO;
+import com.javanauta.usuario_recap.business.dto.ViaCepService;
+import com.javanauta.usuario_recap.infrastructure.clients.ViaCepDTO;
 import com.javanauta.usuario_recap.infrastructure.security.SecurityConfig;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class UsuarioController {
 
     private final UsuarioService service;
+    private final ViaCepService viaCepService;
 
     @PostMapping("/login")
     @Operation(
@@ -131,5 +134,10 @@ public class UsuarioController {
             @RequestHeader("Authorization") String token
     ){
         return ResponseEntity.ok(service.cadastroTelefone(token, dto));
+    }
+
+    @GetMapping("/endereco/{cep}")
+    public ResponseEntity<ViaCepDTO> buscarDadosCep(@PathVariable("cep") String cep){
+        return ResponseEntity.ok(viaCepService.buscarDadosEndereco(cep));
     }
 }
