@@ -59,8 +59,8 @@ O serviço pode ser executado individualmente ou em conjunto com os demais micro
 
 A documentação completa da arquitetura, integração entre os serviços e instruções para execução pode ser encontrada no projeto principal:
 
-👉 **[BFF Agendador]([https://github.com/cardosogoc/bff-agendador](https://github.com/cardosogoc/bff-agendador-tarefas_recap
-))**
+👉 **[BFF Agendador] ** https://github.com/cardosogoc/bff-agendador](https://github.com/cardosogoc/bff-agendador-tarefas_recap
+
 
 ## 🔗 Projeto
 
