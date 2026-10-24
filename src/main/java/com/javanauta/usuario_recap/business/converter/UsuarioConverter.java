@@ -2,7 +2,8 @@ package com.javanauta.usuario_recap.business.converter;
 
 import com.javanauta.usuario_recap.business.dto.EnderecoDTO;
 import com.javanauta.usuario_recap.business.dto.TelefoneDTO;
-import com.javanauta.usuario_recap.business.dto.UsuarioDTO;
+import com.javanauta.usuario_recap.business.dto.in.UsuarioRequestDTO;
+import com.javanauta.usuario_recap.business.dto.out.UsuarioResponseDTO;
 import com.javanauta.usuario_recap.infrastructure.entity.Endereco;
 import com.javanauta.usuario_recap.infrastructure.entity.Telefone;
 import com.javanauta.usuario_recap.infrastructure.entity.Usuario;
@@ -14,7 +15,7 @@ import java.util.List;
 public class UsuarioConverter {
 
     //DTO PARA ENTIDADE
-    public Usuario paraUsuarioEntity(UsuarioDTO dto){
+    public Usuario paraUsuarioEntity(UsuarioRequestDTO dto){
         return Usuario.builder()
                 .nome(dto.getNome())
                 .email(dto.getEmail())
@@ -54,11 +55,12 @@ public class UsuarioConverter {
 
     //ENTIDADE PARA DTO
 
-    public UsuarioDTO paraUsuarioDTO(Usuario entity){
-        return UsuarioDTO.builder()
+    //ENTIDADE PARA DTO
+
+    public UsuarioResponseDTO paraUsuarioResponseDTO(Usuario entity){
+        return UsuarioResponseDTO.builder()
                 .nome(entity.getNome())
                 .email(entity.getEmail())
-                .senha(entity.getSenha())
                 .enderecos(entity.getEnderecos() != null ?
                         paraListaEnderecoDTO(entity.getEnderecos()) : null)
                 .telefones(entity.getTelefones() != null ?
@@ -95,7 +97,7 @@ public class UsuarioConverter {
     }
 
     //ATUALIZAÇÃO PUT/PATCH
-    public Usuario atualizarUsuario(UsuarioDTO dto, Usuario entity){
+    public Usuario atualizarUsuario(UsuarioRequestDTO dto, Usuario entity){
         return Usuario.builder()
                 .nome(dto.getNome() != null ? dto.getNome() : entity.getNome())
                 .id(entity.getId())

@@ -3,8 +3,9 @@ package com.javanauta.usuario_recap.controller;
 import com.javanauta.usuario_recap.business.UsuarioService;
 import com.javanauta.usuario_recap.business.dto.EnderecoDTO;
 import com.javanauta.usuario_recap.business.dto.TelefoneDTO;
-import com.javanauta.usuario_recap.business.dto.UsuarioDTO;
+import com.javanauta.usuario_recap.business.dto.in.UsuarioRequestDTO;
 import com.javanauta.usuario_recap.business.dto.ViaCepService;
+import com.javanauta.usuario_recap.business.dto.out.UsuarioResponseDTO;
 import com.javanauta.usuario_recap.infrastructure.clients.ViaCepDTO;
 import com.javanauta.usuario_recap.infrastructure.security.SecurityConfig;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +34,7 @@ public class UsuarioController {
     @ApiResponse(responseCode = "401", description = "Credenciais inválidas")
     @ApiResponse(responseCode = "400", description = "Dados de login inválidos ou ausentes")
     @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
-    public ResponseEntity<String> login(@RequestBody UsuarioDTO dto){
+    public ResponseEntity<String> login(@RequestBody UsuarioRequestDTO dto) {
         return ResponseEntity.ok(service.autenticarUsuario(dto));
     }
 
@@ -41,7 +42,7 @@ public class UsuarioController {
     @Operation(summary = "Salvar Usuários", description = "Cria um novo usuário")
     @ApiResponse(responseCode = "200", description = "usuário salvo com sucesso")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
-    public ResponseEntity<UsuarioDTO> salvaUsuario(@RequestBody UsuarioDTO dto){
+    public ResponseEntity<UsuarioResponseDTO> salvaUsuario(@RequestBody UsuarioRequestDTO dto) {
         return ResponseEntity.ok(service.salvaUsuario(dto));
     }
 
@@ -51,11 +52,12 @@ public class UsuarioController {
     @ApiResponse(responseCode = "200", description = "usuário encontrado com sucesso")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
     @ApiResponse(responseCode = "401", description = "Busca não Autorizada")
-    public ResponseEntity<UsuarioDTO> buscarUsuarioPorEmail(@RequestBody EmailRequest request) {
+    public ResponseEntity<UsuarioResponseDTO> buscarUsuarioPorEmail(@RequestBody EmailRequest request) {
         return ResponseEntity.ok(service.buscarUsuarioPorEmail(request.email()));
     }
 
-    public record EmailRequest(String email) {}
+    public record EmailRequest(String email) {
+    }
 
     //Pesquisando Usuario por meio de parâmetro
     @GetMapping
@@ -63,7 +65,7 @@ public class UsuarioController {
     @ApiResponse(responseCode = "200", description = "usuário encontrado com sucesso")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
     @ApiResponse(responseCode = "401", description = "Busca não Autorizada")
-    public ResponseEntity<UsuarioDTO> buscaUsuarioPorEmail(@RequestParam("email") String email){
+    public ResponseEntity<UsuarioResponseDTO> buscaUsuarioPorEmail(@RequestParam("email") String email) {
         return ResponseEntity.ok(service.buscarUsuarioPorEmail(email));
     }
 
@@ -73,7 +75,7 @@ public class UsuarioController {
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
     @ApiResponse(responseCode = "403", description = "Usuário não encontrado")
     @ApiResponse(responseCode = "401", description = "Usuário não Autorizado")
-    public ResponseEntity<Void> deletaUsuarioPorEmail(@PathVariable String email){
+    public ResponseEntity<Void> deletaUsuarioPorEmail(@PathVariable String email) {
         service.deletaUsuarioPorEmail(email);
         return ResponseEntity.ok().build();
     }
@@ -84,9 +86,9 @@ public class UsuarioController {
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
     @ApiResponse(responseCode = "403", description = "Usuário não encontrado")
     @ApiResponse(responseCode = "401", description = "Usuário não Autorizado")
-    public ResponseEntity<UsuarioDTO> atualizaUsuario(
-            @RequestBody UsuarioDTO dto,
-            @RequestHeader("Authorization") String token){
+    public ResponseEntity<UsuarioResponseDTO> atualizaUsuario(
+            @RequestBody UsuarioRequestDTO dto,
+            @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(service.atualizaDadosUsuario(token, dto));
     }
 
@@ -98,7 +100,7 @@ public class UsuarioController {
     @ApiResponse(responseCode = "401", description = "Usuário não Autorizado")
     public ResponseEntity<EnderecoDTO> atualizaEndereco(
             @RequestBody EnderecoDTO dto,
-            @RequestParam("id") Long id){
+            @RequestParam("id") Long id) {
         return ResponseEntity.ok(service.atualizaEndereco(id, dto));
     }
 
@@ -110,7 +112,7 @@ public class UsuarioController {
     @ApiResponse(responseCode = "401", description = "Usuário não Autorizado")
     public ResponseEntity<TelefoneDTO> atualizaTelefone(
             @RequestBody TelefoneDTO dto,
-            @RequestParam("id") Long id){
+            @RequestParam("id") Long id) {
         return ResponseEntity.ok(service.atualizaTelefone(id, dto));
     }
 
@@ -121,7 +123,7 @@ public class UsuarioController {
     public ResponseEntity<EnderecoDTO> cadastroEndereco(
             @RequestBody EnderecoDTO dto,
             @RequestHeader("Authorization") String token
-    ){
+    ) {
         return ResponseEntity.ok(service.cadastroEndereco(token, dto));
     }
 
@@ -132,12 +134,12 @@ public class UsuarioController {
     public ResponseEntity<TelefoneDTO> cadastroTelefone(
             @RequestBody TelefoneDTO dto,
             @RequestHeader("Authorization") String token
-    ){
+    ) {
         return ResponseEntity.ok(service.cadastroTelefone(token, dto));
     }
 
     @GetMapping("/endereco/{cep}")
-    public ResponseEntity<ViaCepDTO> buscarDadosCep(@PathVariable("cep") String cep){
+    public ResponseEntity<ViaCepDTO> buscarDadosCep(@PathVariable("cep") String cep) {
         return ResponseEntity.ok(viaCepService.buscarDadosEndereco(cep));
     }
 }
