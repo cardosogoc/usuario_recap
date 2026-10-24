@@ -1,6 +1,5 @@
 package com.javanauta.usuario_recap.infrastructure.repository;
 
-import com.javanauta.usuario_recap.business.dto.UsuarioDTO;
 import com.javanauta.usuario_recap.infrastructure.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
