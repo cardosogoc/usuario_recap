@@ -73,15 +73,11 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDTO buscarUsuarioPorEmail(String email) {
-        try {
-            return converter.paraUsuarioResponseDTO(
-                    usuarioRepository.findByEmail(email).orElseThrow(
-                            () -> new ResourceNotFoundException("Email não encontrado" + email)
-                    )
-            );
-        } catch (ResourceNotFoundException e) {
-            throw new ResourceNotFoundException("Email não encontrado", e.getCause());
-        }
+        return converter.paraUsuarioResponseDTO(
+                usuarioRepository.findByEmail(email).orElseThrow(
+                        () -> new ResourceNotFoundException("Email não encontrado: " + email)
+                )
+        );
     }
 
     public void deletaUsuarioPorEmail(String email) {
