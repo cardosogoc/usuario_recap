@@ -135,4 +135,18 @@ public class UsuarioService {
         return converter.paraTelefoneDTO(telefoneRepository.save(entity));
     }
 
+    public void deletaEndereco(Long id) {
+        if (!enderecoRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Endereço não encontrado");
+        }
+        enderecoRepository.deleteById(id);
+    }
+
+    public void deletaTelefone(Long id) {
+        if (!telefoneRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Telefone não encontrado");
+        }
+        telefoneRepository.deleteById(id);
+    }
+
 }

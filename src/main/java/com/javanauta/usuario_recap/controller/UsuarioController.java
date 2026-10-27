@@ -10,9 +10,11 @@ import com.javanauta.usuario_recap.infrastructure.clients.ViaCepDTO;
 import com.javanauta.usuario_recap.infrastructure.security.SecurityConfig;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -129,5 +131,31 @@ public class UsuarioController {
     @GetMapping("/endereco/{cep}")
     public ResponseEntity<ViaCepDTO> buscarDadosCep(@PathVariable("cep") String cep) {
         return ResponseEntity.ok(viaCepService.buscarDadosEndereco(cep));
+    }
+
+    @DeleteMapping("/endereco/{id}")
+    @Operation(summary = "Deleta endereço por meio do id", description = "Deleta um endereço cadastrado pelo id do mesmo")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Endereço deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Endereço não encontrado"),
+            @ApiResponse(responseCode = "401", description = "Token inválido ou ausente"),
+            @ApiResponse(responseCode = "500", description = "Erro de servidor")
+    })
+    public ResponseEntity<Void> deletaEnderecoPorId(@PathVariable Long id) {
+        service.deletaEndereco(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/telefone/{id}")
+    @Operation(summary = "Deleta telefone por meio do id", description = "Deleta um telefone cadastrado pelo id do mesmo")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Telefone deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Telefone não encontrado"),
+            @ApiResponse(responseCode = "401", description = "Token inválido ou ausente"),
+            @ApiResponse(responseCode = "500", description = "Erro de servidor")
+    })
+    public ResponseEntity<Void> deletaTelefonePorId(@PathVariable Long id) {
+        service.deletaTelefone(id);
+        return ResponseEntity.noContent().build();
     }
 }
